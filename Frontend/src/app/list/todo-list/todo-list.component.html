@@ -47,7 +47,7 @@
             <td mat-cell *matCellDef="let element">
                 <div class="progress mr-4">
                     <div class="progress-bar progress-bar-striped progress-bar-animated float-left"
-                        style="width:{{element.Percent}}%">{{element.Percent}}%</div>
+                        [style]="'width:' + element.Percent + '%'">{{element.Percent}}%</div>
                 </div>
             </td>
         </ng-container>
