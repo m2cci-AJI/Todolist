@@ -8,3 +8,7 @@
   .nav {
     float: right;
   }
+
+  #logout_a {
+    cursor: pointer;
+  }

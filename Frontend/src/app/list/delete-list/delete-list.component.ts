@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ListService } from 'src/app/services/list.service';
 import { List } from 'src/app/models/list.model';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './delete-list.component.html',
   styleUrls: ['./delete-list.component.css']
 })
-export class DeleteListComponent implements OnInit, OnDestroy {
+export class DeleteListComponent implements OnInit {
   id: any;
   deleteListSubscribing: Subscription;
   constructor(private dialogRef: MatDialogRef<DeleteListComponent>,
@@ -30,16 +30,12 @@ export class DeleteListComponent implements OnInit, OnDestroy {
   onDeleteList() {
     this.deleteListSubscribing = this.listService.deleteList(this.id).subscribe((data) => {
       console.log(data);
+      this.dialogRef.close({ action: 1 });
+      this.deleteListSubscribing.unsubscribe();
     },
     (err) => {
       console.log(err);
     });
-    this.dialogRef.close({ action: 1 });
   } // méthode permettant de supprimer une tache de la liste de taches dans le service
   // et d'envoyer la nouvelle liste au composant parent
-
-  ngOnDestroy() {
-    this.deleteListSubscribing.unsubscribe();
-  }
-
 }

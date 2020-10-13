@@ -117,9 +117,10 @@ export class BilanComponent implements OnInit {
                   this.lists[i]['Category'] = ((info.body) as any).Data.Nom;
                  }
                });
+               newLists.push(this.lists[i]);
         }
-        newLists.push(this.lists[i]);
       }
+      console.log('newLists', newLists);
       resolve([...newLists]);
    });
   } // méthode permettant de filter les taches d'une liste

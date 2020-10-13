@@ -4,7 +4,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ListService } from 'src/app/services/list.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { List } from 'src/app/models/list.model';
-import { spot } from 'src/app/models/list.enum';
 import { AuthentificationService } from 'src/app/services/authentification.service';
 import { Subscription } from 'rxjs';
 
@@ -16,14 +15,16 @@ import { Subscription } from 'rxjs';
 export class AddListComponent implements OnInit, OnDestroy {
   typeList: string = 'ponctuel';
   categories: Category[];
-  dateDebut: Date = new Date();
+  dateDebut: any = {year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate()};
   errorDate: boolean = false;
   getCategoriesSubscribing: Subscription;
   addlistSubscribing: Subscription;
   constructor(private dialogRef: MatDialogRef<AddListComponent>,
               private listService: ListService,
               private categoryService: CategoryService,
-              private authentificationService: AuthentificationService) { }
+              private authentificationService: AuthentificationService) { 
+      
+              }
 
   ngOnInit(): void {
     this.getCategoriesSubscribing = this.categoryService.getCategories(this.authentificationService.id).subscribe((data) => {

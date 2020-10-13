@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ListService } from 'src/app/services/list.service';
 import { List } from 'src/app/models/list.model';
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./edit-list.component.css']
 })
 
-export class EditListComponent implements OnInit, OnDestroy {
+export class EditListComponent implements OnInit {
   NomList: string;
   categories: Category[];
   typeList: string;
@@ -109,18 +109,15 @@ export class EditListComponent implements OnInit, OnDestroy {
                           this.changeNgbDateStructToDate(value.dp4), dateFinReal, IsDone, isLate, Percent, idCategory, idUser);
     this.subscriptionEditList = this.listService.editList(this.id, list).subscribe((data) => {
         console.log(data);
+        this.subscribeGetList.unsubscribe();
+        this.subscriptionGetCategories1.unsubscribe();
+        this.subscriptionGetCategories2.unsubscribe();
+        this.subscriptionEditList.unsubscribe();
+        this.dialogRef.close({ action: 1 });
     },
       (err) => {
         console.log(err);
       });
-    this.dialogRef.close({ action: 1 });
   } // méthode permettant d'ajouter une catégorie à la liste de catégorie
-
-  ngOnDestroy() {
-    this.subscribeGetList.unsubscribe();
-    this.subscriptionGetCategories1.unsubscribe();
-    this.subscriptionGetCategories2.unsubscribe();
-    this.subscriptionEditList.unsubscribe();
-  }
 
 }
