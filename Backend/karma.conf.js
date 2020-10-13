@@ -18,7 +18,10 @@ module.exports = function (config) {
       // preprocess matching files before serving them to the browser
       // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            './**/*.js': ['coverage'],
+            '!(coverage|images|node_modules|test)/**/*.js': ['coverage'],
+            'config/*.js': ['coverage'],
+            'models/*.js': ['coverage'],
+            '{app.js, server.js}': ['coverage'],
             'test/*.spec.js': ['browserify']
         },
       // test results reporter to use
@@ -44,7 +47,7 @@ module.exports = function (config) {
       // how many browser should be started simultaneous
         concurrency: Infinity,
         coverageReporter: {
-            dir: './coverage',
+            dir: 'coverage/',
             reporters: [
                 {type: 'lcov', subdir: '.'},
                 {type: 'text-summary'}

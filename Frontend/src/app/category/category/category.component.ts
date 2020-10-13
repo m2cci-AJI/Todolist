@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
 
   length: number; // nombre de ligne  du tableau
   pageSize = 4; // nombre de ligne maximal par page
@@ -148,4 +148,7 @@ export class CategoryComponent implements OnInit {
   } // méthode permettant d'ouvrir le composant DetailsCategory
     // et d'afficher les détails de la catégorie après la fermétrure de fenetre popup
 
+    ngOnDestroy( ) {
+      this.subscriptionGetCategories.unsubscribe();
+    }
 }

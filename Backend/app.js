@@ -36,6 +36,7 @@ app.options('*', cors());
 // middleware pour la trasformation du corps de la requete
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ limit: '10mb', extended: true }));
+console.log('kkkkkkkkkkk');
 
 /*************************************************** API REST **************************************************/
 

@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "clean": "rm -rf node_modules",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "unit": "karma start karma.conf.js ",
+    "test": "npm run unit",
+    "lint": "jslint 'app.js'"
   },
   "keywords": [],
   "author": "",
@@ -19,16 +22,22 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "mariadb": "^2.4.1",
     "multer": "^1.4.2",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.3",
-    "sequelize": "^5.21.6"
+    "pg": "^8.2.2",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.6",
+    "sqlite3": "^5.0.0",
+    "tedious": "^8.3.0"
   },
   "devDependencies": {
     "browserify": "^16.5.1",
     "jasmine": "^3.5.0",
     "jasmine-core": "^3.5.0",
     "jasmine-node": "^3.0.0",
+    "jslint": "^0.12.1",
     "karma": "^5.1.0",
     "karma-browserify": "^7.0.0",
     "karma-chrome-launcher": "^3.1.0",
@@ -36,6 +45,8 @@
     "karma-coverage-istanbul-reporter": "^3.0.3",
     "karma-jasmine": "^3.3.1",
     "karma-jasmine-html-reporter": "^1.5.4",
+    "request": "^2.88.2",
+    "sequelize-test-helpers": "^1.2.3",
     "supertest": "^4.0.2",
     "watchify": "^3.11.1"
   }

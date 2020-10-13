@@ -5,6 +5,7 @@ import { Category } from 'src/app/models/category.model';
 import { CategoryService } from 'src/app/services/category.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthentificationService } from 'src/app/services/authentification.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-category',
@@ -14,6 +15,7 @@ import { AuthentificationService } from 'src/app/services/authentification.servi
 export class AddCategoryComponent implements OnInit {
   public thingForm: FormGroup;
   public imagePreview: string;
+  addCategorySubscribing: Subscription;
   constructor(private dialogRef: MatDialogRef<AddCategoryComponent>,
               private categoryService: CategoryService,
               private formBuilder: FormBuilder,

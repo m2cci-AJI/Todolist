@@ -27,8 +27,9 @@ export class EditListComponent implements OnInit, OnDestroy {
   lists: List[];
   errorDate: boolean;
   subscribeGetList: Subscription;
-  subscriptionGetCategories: Subscription;
   subscriptionEditList: Subscription;
+  subscriptionGetCategories1: Subscription;
+  subscriptionGetCategories2: Subscription;
   constructor(private dialogRef: MatDialogRef<EditListComponent>,
               private listService: ListService,
               private categoryService: CategoryService,
@@ -37,7 +38,7 @@ export class EditListComponent implements OnInit, OnDestroy {
     if (data !== null) {
       this.id = data.data;
     }
-    this.subscriptionGetCategories = this.categoryService.getCategories(this.authentificationService.id).subscribe((info) => {
+    this.subscriptionGetCategories1 = this.categoryService.getCategories(this.authentificationService.id).subscribe((info) => {
       this.categories = ((info.body) as any).Data;
     },
     (err) => {
@@ -50,7 +51,7 @@ export class EditListComponent implements OnInit, OnDestroy {
       const list = ((data.body) as any).Data;
       this.NomList = list['Nom'];
       this.typeList = list['Type'];
-      this.categoryService.getCategory(list['idCategory']).subscribe((info) => {
+      this.subscriptionGetCategories2 = this.categoryService.getCategory(list['idCategory']).subscribe((info) => {
         if (((info.body) as any).Data !== null) {
           this.CategoryList = ((info.body) as any).Data.Nom;
         }
@@ -117,7 +118,8 @@ export class EditListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscribeGetList.unsubscribe();
-    this.subscriptionGetCategories.unsubscribe();
+    this.subscriptionGetCategories1.unsubscribe();
+    this.subscriptionGetCategories2.unsubscribe();
     this.subscriptionEditList.unsubscribe();
   }
 

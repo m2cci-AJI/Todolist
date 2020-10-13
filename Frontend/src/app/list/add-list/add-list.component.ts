@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Category } from 'src/app/models/category.model';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ListService } from 'src/app/services/list.service';
@@ -6,24 +6,27 @@ import { CategoryService } from 'src/app/services/category.service';
 import { List } from 'src/app/models/list.model';
 import { spot } from 'src/app/models/list.enum';
 import { AuthentificationService } from 'src/app/services/authentification.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-list',
   templateUrl: './add-list.component.html',
   styleUrls: ['./add-list.component.css']
 })
-export class AddListComponent implements OnInit {
+export class AddListComponent implements OnInit, OnDestroy {
   typeList: string = 'ponctuel';
   categories: Category[];
   dateDebut: Date = new Date();
   errorDate: boolean = false;
+  getCategoriesSubscribing: Subscription;
+  addlistSubscribing: Subscription;
   constructor(private dialogRef: MatDialogRef<AddListComponent>,
               private listService: ListService,
               private categoryService: CategoryService,
               private authentificationService: AuthentificationService) { }
 
   ngOnInit(): void {
-    this.categoryService.getCategories(this.authentificationService.id).subscribe((data) => {
+    this.getCategoriesSubscribing = this.categoryService.getCategories(this.authentificationService.id).subscribe((data) => {
       this.categories = ((data.body) as any).Data;
     });
   }
@@ -51,12 +54,17 @@ export class AddListComponent implements OnInit {
     const idUser = this.authentificationService.id;
     const list = new List(nom, type, this.listService.changeFormatDate(value.dp3),
       this.listService.changeFormatDate(value.dp4), dateFinReal, false, isLate, value.Percent, idCategory, idUser);
-    this.listService.addList(list).subscribe((data) => {
+    this.addlistSubscribing = this.listService.addList(list).subscribe((data) => {
       console.log(data);
     }, (err) => {
       console.log(err);
     });
     this.dialogRef.close({ action: 1 });
   } // méthode permettant d'ajouter une tache à la liste de taches et de fermer la fenetre par la suite
+
+  ngOnDestroy() {
+     this.getCategoriesSubscribing.unsubscribe();
+     this.addlistSubscribing.unsubscribe();
+  }
 
 }

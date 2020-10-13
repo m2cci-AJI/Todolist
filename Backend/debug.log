@@ -1,0 +1,4 @@
+[0708/142938.058:ERROR:process_reader_win.cc(151)] SuspendThread: Accès refusé. (0x5)
+[0716/143624.672:ERROR:process_reader_win.cc(151)] SuspendThread: Accès refusé. (0x5)
+[0716/143624.755:ERROR:process_reader_win.cc(151)] SuspendThread: Accès refusé. (0x5)
+[0716/144850.635:ERROR:process_reader_win.cc(151)] SuspendThread: Accès refusé. (0x5)

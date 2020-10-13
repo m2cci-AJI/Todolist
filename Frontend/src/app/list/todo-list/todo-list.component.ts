@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -11,13 +11,14 @@ import { DetailsListComponent } from '../details-list/details-list.component';
 import { List } from 'src/app/models/list.model';
 import { CategoryService } from 'src/app/services/category.service';
 import { AuthentificationService } from 'src/app/services/authentification.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css']
 })
-export class TodoListComponent implements OnInit, AfterViewInit {
+export class TodoListComponent implements OnInit, AfterViewInit, OnDestroy {
   length: number; // nombre de ligne  du tableau
   pageSize = 4; // nombre de ligne maximal par page
   displayedColumns: string[] = ['Checkbox', 'Nom', 'Type', 'Category', 'DateDebut',
@@ -26,6 +27,7 @@ export class TodoListComponent implements OnInit, AfterViewInit {
 
   private paginator: MatPaginator;
   private sort: any;
+  getCategorySubscribing: Subscription;
   @ViewChild(MatPaginator, { static: false }) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
     this.dataSource.paginator = this.paginator;
@@ -34,10 +36,12 @@ export class TodoListComponent implements OnInit, AfterViewInit {
     this.sort = content;
     this.dataSource.sort = this.sort;
   } // tri
+  getListSubscribing: Subscription;
+
   constructor(private listService: ListService,
-    private matDialog: MatDialog,
-    private categoryService: CategoryService,
-    private authentificationService: AuthentificationService) {
+              private matDialog: MatDialog,
+              private categoryService: CategoryService,
+              private authentificationService: AuthentificationService) {
   }
 
   functionToMaintainCheckedList(list) {
@@ -65,11 +69,11 @@ export class TodoListComponent implements OnInit, AfterViewInit {
   }
 
   updateData() {
-    this.listService.getLists(this.authentificationService.id).subscribe((data) => {
+    this.getListSubscribing = this.listService.getLists(this.authentificationService.id).subscribe((data) => {
       const lists = ((data.body) as any).Data;
       const newLists: List[] = [];
       for (let i = 0; i < lists.length; i++) {
-        this.categoryService.getCategory(lists[i].idCategory).subscribe((info) => {
+        this.getCategorySubscribing = this.categoryService.getCategory(lists[i].idCategory).subscribe((info) => {
           if (((info.body) as any).Data !== null) {
             lists[i]['Category'] = ((info.body) as any).Data.Nom;
           }
@@ -184,4 +188,8 @@ export class TodoListComponent implements OnInit, AfterViewInit {
   } // méthode permettant d'ouvrir le composant DetailsList
   // et d'afficher les détails de la tache après la fermétrure de fenetre popup
 
+  ngOnDestroy() {
+     this.getListSubscribing.unsubscribe();
+     this.getCategorySubscribing.unsubscribe();
+  }
 }

@@ -1,16 +1,17 @@
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, OnDestroy } from '@angular/core';
 import { ListService } from 'src/app/services/list.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Options } from 'ng5-slider';
 import { spot } from 'src/app/models/list.enum';
 import { CategoryService } from 'src/app/services/category.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-details-list',
   templateUrl: './details-list.component.html',
   styleUrls: ['./details-list.component.css']
 })
-export class DetailsListComponent implements OnInit, AfterViewInit {
+export class DetailsListComponent implements OnInit, AfterViewInit, OnDestroy {
   info: string;
   nomList: string;
   typeList: string;
@@ -56,6 +57,8 @@ export class DetailsListComponent implements OnInit, AfterViewInit {
       }
     }
   };
+  getListSubscribing: Subscription;
+  getCategorySubscribing: Subscription;
 
   constructor(private dialogRef: MatDialogRef<DetailsListComponent>,
               private listService: ListService,
@@ -75,12 +78,12 @@ export class DetailsListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.listService.getList(this.id).subscribe((data) => {
+    this.getListSubscribing = this.listService.getList(this.id).subscribe((data) => {
       console.log(data);
       const list = ((data.body) as any).Data;
       this.nomList = list['Nom'];
       this.typeList = list['Type'];
-      this.categoryService.getCategory(list['idCategory']).subscribe((info) => {
+      this.getCategorySubscribing = this.categoryService.getCategory(list['idCategory']).subscribe((info) => {
         if (((info.body) as any).Data !== null) {
           this.categoryList = ((info.body) as any).Data.Nom;
         }
@@ -125,6 +128,11 @@ export class DetailsListComponent implements OnInit, AfterViewInit {
     } else {
       return false; // type est au long cours
     }
+  }
+
+  ngOnDestroy() {
+     this.getCategorySubscribing.unsubscribe();
+     this.getListSubscribing.unsubscribe();
   }
 
 }

@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
         this.messageError = err.error.message;
       }
     );
+    console.log('rryyyyyyyyyy');
   }
 
   validForm() {
